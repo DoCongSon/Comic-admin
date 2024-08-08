@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Refine, Authenticated } from '@refinedev/core'
 import routerProvider, { NavigateToResource } from '@refinedev/react-router-v6'
 import { ErrorComponent, ThemedLayoutV2, ThemedTitleV2, useNotificationProvider } from '@refinedev/antd'
-import { DashboardOutlined, UserOutlined, BookOutlined } from '@ant-design/icons'
+import { DashboardOutlined, UserOutlined, BookOutlined, PayCircleOutlined } from '@ant-design/icons'
 
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 
@@ -14,6 +14,7 @@ import { authProvider } from './providers/auth-provider'
 import { UserCreate, UserEdit, UserList, UserShow } from './pages/users'
 import { AchievementCreate, AchievementEdit, AchievementList, AchievementShow } from './pages/achievements'
 import { CategoryCreate, CategoryEdit, CategoryList, CategoryShow } from './pages/categories'
+import { PaymentCreate, PaymentEdit, PaymentList, PaymentShow } from './pages/payments'
 import { ComicCreate, ComicEdit, ComicList, ComicShow } from './pages/comics'
 import { ChapterCreate, ChapterEdit, ChapterList, ChapterShow } from './pages/comics/chapters'
 
@@ -22,6 +23,7 @@ import { Login } from './pages/login'
 import Header from './components/Header'
 
 import 'antd/dist/reset.css'
+import RefreshToken from './components/refresh-token'
 
 export default function App(): JSX.Element {
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('dark')
@@ -106,6 +108,18 @@ export default function App(): JSX.Element {
                   canDelete: true,
                 },
               },
+              {
+                name: 'payments',
+                list: '/payments',
+                create: '/payments/create',
+                edit: '/payments/edit/:id',
+                show: '/payments/show/:id',
+                meta: {
+                  label: 'Payments',
+                  icon: <PayCircleOutlined />,
+                  canDelete: true,
+                },
+              },
             ]}
             options={{
               projectId: 'tsxyLz-Ik4ttn-7d7eRE',
@@ -153,6 +167,12 @@ export default function App(): JSX.Element {
                   <Route path='edit/:id' element={<CategoryEdit />} />
                   <Route path='create' element={<CategoryCreate />} />
                 </Route>
+                <Route path='/payments'>
+                  <Route index element={<PaymentList />} />
+                  <Route path='show/:id' element={<PaymentShow />} />
+                  <Route path='edit/:id' element={<PaymentEdit />} />
+                  <Route path='create' element={<PaymentCreate />} />
+                </Route>
               </Route>
               <Route
                 element={
@@ -164,6 +184,7 @@ export default function App(): JSX.Element {
               </Route>
               <Route path='*' element={<ErrorComponent />} />
             </Routes>
+            <RefreshToken />
           </Refine>
         </AntdApp>
       </ConfigProvider>

@@ -150,5 +150,27 @@ export const dataProvider: DataProvider = {
   // createMany: () => { /* ... */ },
   // deleteMany: () => { /* ... */ },
   // updateMany: () => { /* ... */ },
-  // custom: () => { /* ... */ },
+  custom: async ({ url, method, payload }) => {
+    try {
+      // Tạo request options
+      const response = await fetcher(`${API_URL}/${url}`, {
+        method,
+        body: JSON.stringify(payload),
+      })
+
+      let data
+      if (response.status !== 204) {
+        data = await response.json()
+      } else {
+        data = null
+      }
+
+      // Trả về dữ liệu
+      return {
+        data,
+      }
+    } catch (error) {
+      throw new Error('Custom request failed')
+    }
+  },
 }
